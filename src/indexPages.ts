@@ -40,14 +40,16 @@ export async function listArticles() {
 
 export async function listContent() {
   const data = await listArticles();
-  const pages: {title: string, body: string}[] = []
+  const pages: {title: string, html: string, text?: string}[] = []
   for (const art of data) {
+    console.log("Fetching in %s!", art.title);
     const {document} = (new JSDOM(await httpRequest.bufferFetch({url: art.link, headers}).then(({data}) => data.toString("utf8")))).window;
     const docBody = document.querySelector("div[class=\"article-body\"]");
     if (!docBody) continue;
     pages.push({
       title: art.title,
-      body: docBody["innerText"]||docBody.innerHTML
+      html: docBody.innerHTML,
+      text: docBody["innerText"]
     });
   }
   return pages;
