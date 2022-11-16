@@ -19,7 +19,7 @@ export async function listArticles() {
   const dataLog: {link: string, title: string}[] = [];
   while (true) {
     if (!nextPage) break;
-    const {document} = (new JSDOM(await httpRequest.bufferFetch({url: nextPage, headers}).then(({data}) => data.toString("utf8")))).window;
+    const {document} = (new JSDOM(await httpRequest.bufferFetch({url: nextPage, headers}).then(({data}) => data.toString("utf8")), {url: nextPage})).window;
     for (const li of Array.from(document.querySelectorAll("ul[class=\"article-list\"] > li")||[])) {
       let link = li.querySelector("a");
       if (!link) continue;
@@ -40,16 +40,15 @@ export async function listArticles() {
 
 export async function listContent() {
   const data = await listArticles();
-  const pages: {title: string, html: string, text?: string}[] = []
+  const pages: {title: string, html: string}[] = [];
   for (const art of data) {
-    console.log("Fetching in %s!", art.title);
+    // console.log("Fetching in %s!", art.title);
     const {document} = (new JSDOM(await httpRequest.bufferFetch({url: art.link, headers}).then(({data}) => data.toString("utf8")))).window;
     const docBody = document.querySelector("div[class=\"article-body\"]");
     if (!docBody) continue;
     pages.push({
       title: art.title,
-      html: docBody.innerHTML,
-      text: docBody["innerText"]
+      html: docBody.innerHTML
     });
   }
   return pages;
