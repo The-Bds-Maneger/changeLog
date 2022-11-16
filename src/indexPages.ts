@@ -42,7 +42,7 @@ export async function listContent() {
   const data = await listArticles();
   const pages: {title: string, body: string}[] = []
   for (const art of data) {
-    // const {document} = (new JSDOM(await httpRequest.bufferFetch({url: art.link, headers}).then(({data}) => data.toString("utf8")))).window;
+    const {document} = (new JSDOM(await httpRequest.bufferFetch({url: art.link, headers}).then(({data}) => data.toString("utf8")))).window;
     const docBody = document.querySelector("div[class=\"article-body\"]");
     if (!docBody) continue;
     pages.push({
