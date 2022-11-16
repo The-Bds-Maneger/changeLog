@@ -28,11 +28,11 @@ export async function listArticles() {
         title: link.innerHTML,
       });
     }
-    let nextPageQuery = document.querySelector("li[class=\"pagination-next\"] > a")["href"];
+    let nextPageQuery = document.querySelector("li[class=\"pagination-next\"] > a");
     if (!nextPageQuery) nextPage = undefined
     else {
-      if (nextPageQuery.startsWith("/")) nextPageQuery = baseUrl+nextPageQuery;
-      nextPage = nextPageQuery;
+      if (nextPageQuery["href"].startsWith("/")) nextPageQuery["href"] = baseUrl+nextPageQuery["href"];
+      nextPage = nextPageQuery["href"];
     }
   }
   return dataLog;
