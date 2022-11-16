@@ -28,7 +28,7 @@ export async function listArticles() {
         title: link.innerHTML,
       });
     }
-    const nextPageQuery = document.querySelector("li[class=\"pagination-next\"] > a")?.href;
+    let nextPageQuery = document.querySelector("li[class=\"pagination-next\"] > a")["href"];
     if (!nextPageQuery) nextPage = undefined
     else {
       if (nextPageQuery.startsWith("/")) nextPageQuery = baseUrl+nextPageQuery;
